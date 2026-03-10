@@ -13,6 +13,8 @@ export class ProductsController {
     @Headers('x-org-id') orgId: string,
     @Body() dto: CreateProductDto,
   ) {
+    console.log("ORG ID:", orgId)
+    console.log("DTO:", dto)
     return this.productsService.create(orgId, dto)
   }
 
