@@ -18,7 +18,7 @@ export default function Signup() {
     e.preventDefault()
 
     const res = await api.post("/auth/signup",form)
-
+    console.log(res, ' is the res of /auth/signup')
     const token = res.data.token
     const payload = JSON.parse(atob(token.split(".")[1]))
 

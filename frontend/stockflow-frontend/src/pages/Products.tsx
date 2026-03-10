@@ -8,7 +8,8 @@ export default function Products(){
   const [name,setName] = useState("")
   const [sku,setSku] = useState("")
   const [quantity,setQuantity] = useState(0)
-
+  const [editingId,setEditingId] = useState<string | null>(null)
+  const [editQuantity,setEditQuantity] = useState<number>(0)
   const load = async ()=>{
 
     const res = await api.get("/products")
@@ -31,6 +32,17 @@ export default function Products(){
     load()
 
   }
+  const updateQuantity = async (id:string) => {
+
+    await api.patch(`/products/${id}`,{
+        quantity: editQuantity
+    })
+
+    setEditingId(null)
+
+    load()
+
+    }
 
   return(
     <div className="bg-gray-100 min-h-screen">
@@ -99,17 +111,61 @@ export default function Products(){
                 {products.map(p=>(
                 <tr key={p.id} className="border-t">
 
-                    <td className="p-3">{p.name}</td>
-                    <td className="p-3">{p.sku}</td>
-                    <td className="p-3">{p.quantity}</td>
+                <td className="p-3">{p.name}</td>
 
-                    <td className="p-3">
+                <td className="p-3">{p.sku}</td>
+
+                <td className="p-3">
+
+                    {editingId === p.id ? (
+
+                    <input
+                    type="number"
+                    className="border p-1 w-20"
+                    value={editQuantity}
+                    onChange={(e)=>setEditQuantity(Number(e.target.value))}
+                    />
+
+                    ) : (
+
+                    p.quantity
+
+                    )}
+
+                    </td>
+
+                    <td className="p-3 flex gap-3">
+
+                    {editingId === p.id ? (
+
                     <button
-                        onClick={()=>remove(p.id)}
-                        className="text-red-600"
+                    onClick={()=>updateQuantity(p.id)}
+                    className="text-green-600"
                     >
-                        Delete
+                    Save
                     </button>
+
+                    ) : (
+
+                    <button
+                    onClick={()=>{
+                    setEditingId(p.id)
+                    setEditQuantity(p.quantity)
+                    }}
+                    className="text-blue-600"
+                    >
+                    Edit
+                    </button>
+
+                    )}
+
+                    <button
+                    onClick={()=>remove(p.id)}
+                    className="text-red-600"
+                    >
+                    Delete
+                    </button>
+
                     </td>
 
                 </tr>

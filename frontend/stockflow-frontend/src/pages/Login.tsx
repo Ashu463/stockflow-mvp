@@ -14,7 +14,7 @@ export default function Login() {
   const login = async (e:any) => {
 
     e.preventDefault()
-
+    console.log("call gyi with this data", form)
     const res = await api.post("/auth/login",form)
 
     const token = res.data.token

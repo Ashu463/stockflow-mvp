@@ -1,6 +1,5 @@
-import { useEffect,useState } from "react"
+import { useEffect, useState } from "react"
 import api from "../api/api"
-import { Link } from "react-router-dom"
 import Navbar from "../components/Navbar"
 
 export default function Dashboard(){
@@ -8,73 +7,121 @@ export default function Dashboard(){
   const [data,setData] = useState<any>(null)
 
   useEffect(()=>{
-
-    const load = async ()=>{
-
-      const res = await api.get("/dashboard")
-      setData(res.data)
-
-    }
-
     load()
-
   },[])
 
-  if(!data) return <div className="p-10">Loading...</div>
+  const load = async ()=>{
 
-  return (
+    const res = await api.get("/dashboard")
+
+    setData(res.data)
+
+  }
+
+  if(!data) return <p>Loading...</p>
+
+  return(
 
     <div className="bg-gray-100 min-h-screen">
 
-        <Navbar/>
+      <Navbar/>
 
-        <div className="p-10">
+      <div className="max-w-6xl mx-auto p-6">
 
-        <div className="flex justify-between mb-8">
+        <div className="flex justify-between mb-6">
 
-            <h1 className="text-3xl font-bold">
-            Dashboard
-            </h1>
-
-            <Link to="/products" className="bg-blue-600 text-white px-4 py-2 rounded">
-            Manage Products
-            </Link>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
 
         </div>
 
-        <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-2 gap-6 mb-6">
 
-            <div className="bg-white p-6 shadow rounded">
+          <div className="bg-white shadow p-6 rounded">
+
             <p className="text-gray-500">Total Products</p>
-            <p className="text-3xl font-bold">{data.totalProducts}</p>
-            </div>
+            <h2 className="text-3xl">{data.totalProducts}</h2>
 
-            <div className="bg-white p-6 shadow rounded">
+          </div>
+
+          <div className="bg-white shadow p-6 rounded">
+
             <p className="text-gray-500">Total Quantity</p>
-            <p className="text-3xl font-bold">{data.totalQuantity}</p>
-            </div>
+            <h2 className="text-3xl">{data.totalQuantity}</h2>
+
+          </div>
 
         </div>
+
+        {/* All Products */}
+
+        <div className="bg-white shadow rounded p-6 mb-6">
+
+          <h2 className="text-xl mb-4">All Products</h2>
+
+          <table className="w-full">
+
+            <thead>
+
+              <tr className="text-left border-b">
+
+                <th className="p-2">Name</th>
+                <th className="p-2">Organization</th>
+                <th className="p-2">Quantity</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {data.products.map((p:any)=>(
+
+                <tr key={p.id} className="border-b">
+
+                  <td className="p-2">{p.name}</td>
+                  <td className="p-2">{p.organization.name}</td>
+
+                  <td className={`p-2 ${p.quantity <= 5 ? "text-red-600 font-semibold":""}`}>
+                    {p.quantity}
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        {/* Low Stock */}
 
         <div className="bg-white shadow rounded p-6">
 
-            <h2 className="text-xl font-bold mb-4">
-            Low Stock Items
-            </h2>
+          <h2 className="text-xl mb-4">Low Stock Items</h2>
 
-            {data.lowStockItems.length === 0 && (
+          {data.lowStockItems.length === 0 && (
             <p>No low stock items</p>
-            )}
+          )}
 
-            {data.lowStockItems.map((p:any)=>(
-            <div key={p.sku} className="border-b py-2">
-                {p.name} — {p.quantity}
+          {data.lowStockItems.map((p:any)=>(
+
+            <div key={p.id} className="flex justify-between border-b py-2">
+
+              <span>{p.name}</span>
+              <span className="text-red-600">{p.quantity}</span>
+
             </div>
-            ))}
+
+          ))}
 
         </div>
 
-        </div>
+      </div>
+
     </div>
+
   )
+
 }

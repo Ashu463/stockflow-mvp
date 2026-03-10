@@ -1,42 +1,31 @@
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from 'prisma/prisma.service'
+import { Injectable } from "@nestjs/common"
+import { PrismaService } from "prisma/prisma.service"
 
 @Injectable()
 export class DashboardService {
 
   constructor(private prisma: PrismaService) {}
 
-  async getDashboard(orgId: string) {
+  async getDashboard() {
 
-    const totalProducts = await this.prisma.product.count({
-      where: { organizationId: orgId }
-    })
-
-    const quantityAgg = await this.prisma.product.aggregate({
-      where: { organizationId: orgId },
-      _sum: {
-        quantity: true
+    const products = await this.prisma.product.findMany({
+      include: {
+        organization: true
       }
     })
 
-    const lowStockItems = await this.prisma.product.findMany({
-      where: {
-        organizationId: orgId,
-        quantity: {
-          lte: this.prisma.product.fields.lowStockThreshold
-        }
-      },
-      select: {
-        name: true,
-        sku: true,
-        quantity: true,
-        lowStockThreshold: true
-      }
-    })
+    const totalProducts = products.length
+
+    const totalQuantity = products.reduce((sum, p) => {
+      return sum + p.quantity
+    }, 0)
+
+    const lowStockItems = products.filter(p => p.quantity <= 5)
 
     return {
       totalProducts,
-      totalQuantity: quantityAgg._sum.quantity || 0,
+      totalQuantity,
+      products,
       lowStockItems
     }
   }
