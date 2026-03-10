@@ -1,10 +1,11 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "https://stockflow-mvp-backend.onrender.com/"
+  baseURL: "https://stockflow-mvp-backend.onrender.com"
 })
 
 api.interceptors.request.use((config) => {
+
   const orgId = localStorage.getItem("orgId")
 
   if (orgId) {
