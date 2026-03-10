@@ -1,7 +1,7 @@
 import { useState } from "react"
 import api from "../api/api"
 import { useNavigate, Link } from "react-router-dom"
-
+import Navbar from "../components/Navbar"
 export default function Login() {
 
   const navigate = useNavigate()
@@ -26,43 +26,49 @@ export default function Login() {
     navigate("/dashboard")
   }
 
-  return (
+    return (
 
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="bg-gray-100 min-h-screen">
 
-      <form onSubmit={login} className="bg-white p-8 rounded shadow w-96">
+        <Navbar minimal={true} />
 
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Login
-        </h2>
+        <div className="flex items-center justify-center mt-20">
 
-        <input
-          className="w-full border p-2 mb-4 rounded"
-          placeholder="Email"
-          onChange={(e)=>setForm({...form,email:e.target.value})}
-        />
+        <form onSubmit={login} className="bg-white p-8 rounded shadow w-96">
 
-        <input
-          className="w-full border p-2 mb-4 rounded"
-          type="password"
-          placeholder="Password"
-          onChange={(e)=>setForm({...form,password:e.target.value})}
-        />
+            <h2 className="text-2xl font-bold mb-6 text-center">
+            Login
+            </h2>
 
-        <button className="w-full bg-blue-600 text-white p-2 rounded">
-          Login
-        </button>
+            <input
+            className="w-full border p-2 mb-4 rounded"
+            placeholder="Email"
+            onChange={(e)=>setForm({...form,email:e.target.value})}
+            />
 
-        <p className="text-center mt-4">
-          No account?
-          <Link to="/signup" className="text-blue-600 ml-1">
-            Signup
-          </Link>
-        </p>
+            <input
+            className="w-full border p-2 mb-4 rounded"
+            type="password"
+            placeholder="Password"
+            onChange={(e)=>setForm({...form,password:e.target.value})}
+            />
 
-      </form>
+            <button className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+            Login
+            </button>
+
+            <p className="text-center mt-4 text-sm">
+            No account?
+            <Link to="/signup" className="text-blue-600 ml-1">
+                Signup
+            </Link>
+            </p>
+
+        </form>
+
+        </div>
 
     </div>
 
-  )
+    )
 }
