@@ -32,4 +32,5 @@ model Product {
   sku            String
   quantity       Int
   createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

@@ -13,6 +13,7 @@ export class ProductsService {
       data: {
         ...dto,
         organizationId: orgId,
+        updatedAt: new Date()
       },
     })
   }
