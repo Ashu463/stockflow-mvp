@@ -19,3 +19,7 @@ Frontend
 - Product CRUD
 - Inventory dashboard
 - Low stock alerts
+
+## Live Demo
+- Frontend: Deployed on Vercel [LINK](https://stockflow-mvp-git-main-ashutosh-kasaudhans-projects.vercel.app/)
+Backend: Deployed on Render [LINK](https://stockflow-mvp-backend.onrender.com)
