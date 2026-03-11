@@ -20,7 +20,20 @@ export class DashboardService {
       return sum + p.quantity
     }, 0)
 
-    const lowStockItems = products.filter(p => p.quantity <= 5)
+    const lowStockItems = await this.prisma.product.findMany({
+      where: {
+        quantity: {
+          lte: 5
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        sku: true,
+        quantity: true,
+        lowStockThreshold: true
+      }
+    })
 
     return {
       totalProducts,
